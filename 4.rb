@@ -39,31 +39,34 @@ Output: 0.00000
 # @param {Integer[]} nums2
 # @return {Float}
 def find_median_sorted_arrays(nums1, nums2)
-    total = (nums1.size + nums2.size)
-    n1, n2 = 0,0
-    merged_arr = []
-    while(true) do
-        break if !nums1[n1] and !nums2[n2]
-        if nums1[n1] and nums2[n2]
-            if nums1[n1] <= nums2[n2]
-                merged_arr << nums1[n1]
-                n1 += 1
-            else
-                merged_arr << nums2[n2]
-                n2 += 1
-            end
-        elsif nums1[n1]
-            merged_arr << nums1[n1]
-            n1 += 1
-        else
-            merged_arr << nums2[n2]
-            n2 += 1
-        end
-    end
-    p total, merged_arr
-    if total.even?
-        (merged_arr[total/2] + merged_arr[(total/2)-1])/2.0
+    i, j = 0, 0
+    merged_arr = [] 
+    total_ele = nums1.size + nums2.size 
+    if total_ele.odd?
+        required = [total_ele/2]
     else
-        merged_arr[total/2].to_f
+        required = [(total_ele/2)-1, (total_ele/2)]
     end
+    
+    while(true) do
+       if merged_arr.size > total_ele/2
+           break
+       end
+        p [i,j, nums1[i], nums2[j]]
+       if !nums1[i]
+           p "nums1 empty"
+           merged_arr += nums2[j..-1]
+           break
+       elsif !nums2[j]  
+           merged_arr += nums1[i..-1]
+           break
+       elsif nums1[i] <= nums2[j]
+           merged_arr << nums1[i]
+           i += 1
+       else
+           merged_arr << nums2[j]
+           j += 1
+       end
+    end
+    (required.map{|ind| merged_arr[ind]}.reduce(:+))/required.size.to_f
 end
