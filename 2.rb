@@ -12,36 +12,46 @@ Explanation: 342 + 465 = 807.
 
 """
 
-
 # Definition for singly-linked list.
- class ListNode
-     attr_accessor :val, :next
-     def initialize(val = 0, _next = nil)
-         @val = val
-         @next = _next
-     end
- end
-
+# class ListNode
+#     attr_accessor :val, :next
+#     def initialize(val = 0, _next = nil)
+#         @val = val
+#         @next = _next
+#     end
+# end
 # @param {ListNode} l1
 # @param {ListNode} l2
 # @return {ListNode}
 def add_two_numbers(l1, l2)
-    result = ListNode.new
-    tmp = result
-    while(l1 or l2) do
-      val1 = l1 ? l1.val : 0
-      val2 = l2 ? l2.val : 0
-      result.val += (val1 + val2)
-      if result.val > 9
-          result.val -= 10
-          result.next = ListNode.new(1)
-      else
-          result.next = ListNode.new
+   ret = ListNode.new
+   ll = ret
+   carry = 0
+   while(true) do 
+      break if !l1 and !l2  
+      val1, val2 = 0, 0
+      if l1
+          val1 = l1.val
+          l1 = l1.next
       end
-      l1 = l1.next if l1
-      l2 = l2.next if l2
-      result.next = nil if l1.nil? and l2.nil? and result.next.val == 0
-      result = result.next
-    end
-    tmp
+       
+      if l2
+          val2 = l2.val
+          l2 = l2.next
+      end
+      sum = val1 + val2 + carry
+      if sum > 9
+          sum = sum-10
+          carry = 1
+      else
+          carry = 0
+      end
+      ret.val = sum
+      if l1 or l2 
+        ret = ret.next = ListNode.new 
+      elsif carry == 1
+        ret.next = ListNode.new(1)
+      end
+   end
+   ll
 end
